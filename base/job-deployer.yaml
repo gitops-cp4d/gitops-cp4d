@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cloud-pak-deployer
+  namespace: cloud-pak-deployer
+spec:
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        app: cloud-pak-deployer
+    spec:
+      serviceAccountName: cloud-pak-deployer-sa
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 0
+      containers:
+      - name: cloud-pak-deployer
+        image: quay.io/cloud-pak-deployer/cloud-pak-deployer:latest
+        imagePullPolicy: Always
+        env:
+        - name: CONFIG_DIR
+          value: /Data/cpd-config
+        - name: STATUS_DIR
+          value: /Data/cpd-status
+        - name: CP_ENTITLEMENT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cloud-pak-entitlement-key
+              key: cp-entitlement-key
+        volumeMounts:
+        - name: config-volume
+          mountPath: /Data/cpd-config/config
+        - name: status-volume
+          mountPath: /Data/cpd-status
+        command: ["/bin/sh","-xc"]
+        args: 
+          - /cloud-pak-deployer/cp-deploy.sh env apply -v
+      volumes:
+      - name: config-volume
+        configMap:
+          name: cloud-pak-deployer-config
+      - name: status-volume
+        persistentVolumeClaim:
+          claimName: cloud-pak-deployer-status

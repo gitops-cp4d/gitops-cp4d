@@ -1,0 +1,9 @@
+resources:
+  - crb.yaml
+  - ns.yaml
+  - rb.yaml
+  - sa.yaml
+  - pvc.yaml
+  # - job-starter.yaml
+  - job-debug.yaml
+  - job-deployer.yaml

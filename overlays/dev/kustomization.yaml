@@ -1,0 +1,11 @@
+resources:
+  - ../../base
+
+configMapGenerator:
+  - name: cloud-pak-deployer-config
+    namespace: cloud-pak-deployer
+    files:
+      - cpd-config.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
