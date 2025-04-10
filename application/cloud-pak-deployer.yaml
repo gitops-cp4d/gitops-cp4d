@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Howard-Luo/cp4d-gitops.git
+    repoURL: <repoURL>
     targetRevision: HEAD
     path: overlays/dev
   destination:
